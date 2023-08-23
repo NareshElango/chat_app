@@ -43,7 +43,9 @@ class _homepageState extends State<homepage> {
           child: Container(
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection("chatroom").where("users",arrayContains: widget.UserModel.uid).orderBy("createdon")
+                .collection("chatroom")
+                .where("users", arrayContains: widget.UserModel.uid)
+                .orderBy("createdon")
                 // .where("participants.${widget.UserModel.uid}", isEqualTo: true)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -92,11 +94,20 @@ class _homepageState extends State<homepage> {
                                         targetuser.profilepic.toString()),
                                   ),
                                   title: Text(targetuser.fullname.toString()),
-                                  subtitle:(chatroomModel.lastmessage.toString()!="")? Text(
-                                      chatroomModel.lastmessage.toString()):Text("Say hi to your new friend",style: TextStyle(
-                                        color: Theme.of(context).colorScheme.secondary
-                                      ),),
+                                  subtitle: (chatroomModel.lastmessage
+                                              .toString() !=
+                                          "")
+                                      ? Text(
+                                          chatroomModel.lastmessage.toString())
+                                      : Text(
+                                          "Say hi to your new friend",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
+                                        ),
                                 );
+                                Divider();
                               } else {
                                 return Container();
                               }

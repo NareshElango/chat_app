@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class chatroompage extends StatefulWidget {
   final usermodel targetuser;
@@ -46,6 +47,7 @@ class _chatroompageState extends State<chatroompage> {
     String msg = msgcon.text.trim();
     msgcon.clear();
     if (msg != "") {
+      DateTime currentTime = DateTime.now();
       messagemodel newmessage = messagemodel(
           messageid: uuid.v1(),
           sender: widget.userModel.uid,
@@ -75,7 +77,12 @@ class _chatroompageState extends State<chatroompage> {
         leading: BackButton(
           onPressed: () {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => homepage(UserModel: widget.userModel , firebaseuser: widget.firebaseuser,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => homepage(
+                          UserModel: widget.userModel,
+                          firebaseuser: widget.firebaseuser,
+                        )));
           },
         ),
         title: Row(
@@ -122,6 +129,11 @@ class _chatroompageState extends State<chatroompage> {
                                 messagemodel currentmsg = messagemodel.fromMap(
                                     datasnapshot.docs[index].data()
                                         as Map<String, dynamic>);
+                                String formatedtime = "";
+                                if (currentmsg.createdon != null) {
+                                  formatedtime = DateFormat.jm()
+                                      .format(currentmsg.createdon!);
+                                }
                                 return Row(
                                   mainAxisAlignment: (currentmsg.sender ==
                                           widget.userModel.uid)
@@ -141,10 +153,23 @@ class _chatroompageState extends State<chatroompage> {
                                                   .secondary,
                                           borderRadius:
                                               BorderRadius.circular(5)),
-                                      child: Text(
-                                        currentmsg.text.toString(),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                                      // child: Text(
+                                      //   currentmsg.text.toString(),
+                                      //   style: TextStyle(color: Colors.white),
+                                      // ),
+                                      child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  currentmsg.text.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Text(
+                                  formatedtime, // Display only the time
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ]
+                                      )
                                     ),
                                   ],
                                 );

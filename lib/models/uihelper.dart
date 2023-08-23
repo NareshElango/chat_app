@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 
 class uihelper {
   static void showloadingdialog(BuildContext context, String title) {
-    mainAxisSize:
-    MainAxisSize.min;
+   
+   
     AlertDialog loadingdialog = AlertDialog(
       content: Container(
         padding: EdgeInsets.all(20),
         child: Column(
+           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(),
             SizedBox(
@@ -33,13 +34,18 @@ class uihelper {
       BuildContext context, String title, String content) {
     AlertDialog alertdialog = AlertDialog(
       title: Text(title),
-      content: Text(content),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(content)
+        ],
+      ),
       actions: [
         TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text("Ok"))
+            child: Text("Ok")),
       ],
     );
 
